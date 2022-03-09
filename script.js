@@ -84,7 +84,6 @@ csvForm.addEventListener('submit', (e) => {
     header: true,
     skipEmptyLines: true,
     complete: function (res) {
-      console.log(res);
       const displayPair = pairWorkedTheLongestTime(res);
 
       if (csvTable.classList.contains('hidden'))
