@@ -1,4 +1,4 @@
-## Sirma Solutions Employee Taks
+## Sirma Solutions Employee Task
 Application that identifies the pair of employees who have worked together on common projects for the longest period of time.
 
 ## Technologies Used
