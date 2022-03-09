@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EmployeePairs</title>
+
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="script.js"></script>
+  </head>
+  <body>
+    <div class="container logo-container flex">
+      <a class="logo flex" href="index.html">
+        <img
+          class="logo__img"
+          src="img/logo-icon.png"
+          alt="employee pair"
+          draggable="false"
+        />
+        <p class="logo__text">
+          Employee<span class="logo__text--blue">Pairs</span>
+        </p>
+      </a>
+      <p class="subtext text-center">
+        <em
+          >Get the pair of employees who have worked together on common projects
+          for the longest period of time from a csv file!</em
+        >
+      </p>
+    </div>
+
+    <section class="container text-center">
+      <h1 class="heading">Upload a CSV File</h1>
+      <p style="margin-top: 0.75rem">Click or drag and drop .csv file below</p>
+      <div class="flex form-container">
+        <form class="upload-csv">
+          <input type="file" id="csvFile" accept=".csv" />
+          <br />
+          <input class="btn" type="submit" value="Submit" />
+        </form>
+      </div>
+    </section>
+
+    <section class="csv-data container">
+      <table class="csv-table hidden">
+        <thead>
+          <tr>
+            <th>Employee ID #1</th>
+            <th>Employee ID #2</th>
+            <th>Project ID</th>
+            <th>Days Worked</th>
+          </tr>
+        </thead>
+        <tbody class="csv-table__body">
+          <!-- <tr>
+            <td>32</td>
+            <td>42</td>
+            <td>10</td>
+            <td>
+              <em>Employee #1:</em> <span class="emp-1">33</span>,
+              <em>Employee #2:</em> <span class="emp-2">30</span>,
+              <em>Total:</em> <span class="total">63</span>
+            </td>
+          </tr> -->
+        </tbody>
+      </table>
+    </section>
+  </body>
+</html>

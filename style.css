@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+  --off-white: #fffffe;
+  --main-blue: #3da9fc;
+  --heading-color: #094067;
+  --body-color: #5f6c7b;
+  --light-gray: #c7c2c2;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  background: var(--off-white);
+  color: var(--body-color);
+}
+
+img {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--heading-color);
+}
+
+a {
+  text-decoration: none;
+}
+
+.container {
+  max-width: 960px;
+  width: 95%;
+  margin: 0 auto;
+}
+
+.flex {
+  display: flex;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.heading {
+  font-size: 3.3rem;
+}
+
+.logo-container {
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 5rem;
+}
+
+.logo {
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.logo__img {
+  align-self: center;
+  width: 4rem;
+}
+
+.logo__text {
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.logo__text--blue {
+  color: var(--main-blue);
+}
+
+.subtext {
+  font-size: 1.4rem;
+  max-width: 550px;
+  width: 100%;
+  line-height: 1.6;
+}
+
+.form-container {
+  justify-content: center;
+}
+
+.upload-csv {
+  position: relative;
+}
+
+#csvFile {
+  padding: 3rem 0;
+  margin: 2.5rem 0;
+  background: var(--heading-color);
+  color: var(--off-white);
+  border-radius: 5px;
+  cursor: pointer;
+
+  font-family: inherit;
+}
+
+#csvFile::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  display: inline-block;
+  cursor: pointer;
+  background: var(--main-blue);
+  color: var(--off-white);
+  border: none;
+  border-radius: 5px;
+  padding: 0.5em 3em;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.75;
+}
+
+.csv-data {
+  margin-top: 5rem;
+}
+
+.csv-table {
+  width: 100%;
+  font-size: 1.6rem;
+  border-collapse: collapse;
+  border: 1px solid var(--light-gray);
+}
+
+.csv-table thead tr th:not(:last-child) {
+  border-right: 1px solid var(--light-gray);
+}
+
+.csv-table thead tr th {
+  border-bottom: 1px solid var(--light-gray);
+  text-align: left;
+}
+
+.csv-table tbody tr {
+  background-color: #f8f6f6;
+}
+
+.csv-table tbody tr td {
+  font-weight: 400;
+  color: #2e2e2e;
+}
+
+.csv-table th,
+.csv-table td {
+  padding: 1rem;
+}
+
+.emp-1,
+.emp-2,
+.total {
+  font-weight: 600;
+}
+
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 50%;
+  }
+}

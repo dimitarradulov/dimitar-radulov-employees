@@ -1,0 +1,28 @@
+{
+  "name": "dimitar-radulov-employees",
+  "version": "1.0.0",
+  "description": "",
+  "default": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dimitarradulov/dimitar-radulov-employees.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dimitarradulov/dimitar-radulov-employees/issues"
+  },
+  "homepage": "https://github.com/dimitarradulov/dimitar-radulov-employees#readme",
+  "dependencies": {
+    "papaparse": "^5.3.1"
+  },
+  "devDependencies": {
+    "core-js": "^3.21.1",
+    "parcel": "^2.3.2"
+  }
+}
