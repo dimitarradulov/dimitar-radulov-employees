@@ -30,6 +30,34 @@ Steps I thought of and executed for solving the task:
   - Papa Parse 5.0
   - Parcel
 
+## How to Setup
+
+Run the following commands to setup, given node and npm is available:
+
+1. Clone the repo:
+
+```
+git clone https://github.com/dimitarradulov/dimitar-radulov-employees.git
+```
+
+2. Cd to the directory
+
+```
+cd dimitar-radulov-employees
+```
+
+3. Install dependencies
+
+```
+npm install
+```
+
+4. Run the app
+
+```
+npm start
+```
+
 ## Quick Preview
 
 You can check out the app here:
