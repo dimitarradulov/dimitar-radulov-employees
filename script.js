@@ -143,7 +143,7 @@ csvForm.addEventListener('submit', (e) => {
 
   if (!input) return;
 
-  // Check if valid format
+  // Check if valid file format
   const regex = /.+\.csv$/;
 
   if (!regex.test(input.name))
@@ -157,7 +157,10 @@ csvForm.addEventListener('submit', (e) => {
     complete: function (res) {
       console.log(res);
 
-      if (!validCsvDataFields(res)) return errorMsg('Invalid data format!');
+      if (!validCsvDataFields(res))
+        return errorMsg(
+          'The data is not formatted correctly! Check for missing fields or invalid ones. ⛔'
+        );
 
       const displayPair = pairWorkedTheLongestTime(res);
 
