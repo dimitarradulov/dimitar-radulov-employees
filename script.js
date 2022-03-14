@@ -77,29 +77,43 @@ const validCsvDataFields = (csvData) => {
   return true;
 };
 
+const pairWorkedTogether = (emp1, emp2) => {
+  if (moment(emp1.DateFrom).isBetween(emp2.DateFrom, emp2.DateTo)) return true;
+
+  if (moment(emp2.DateFrom).isBetween(emp1.DateFrom, emp1.DateTo)) return true;
+
+  return false;
+};
+
 const pairWorkedTheLongestTime = (csvData) => {
   const pairs = {};
 
   const { data } = csvData;
 
+  console.log(data);
+
   data
     .sort((a, b) => Number(a.ProjectID) - Number(b.ProjectID))
     .forEach((emp, i, arr) => {
       if (i === arr.length - 1) return;
-      if (emp.ProjectID === arr[i + 1].ProjectID) {
-        pairs[`pairProjectID#${emp.ProjectID}`] = {
-          pair: [emp, arr[i + 1]],
-          emp1DaysWorked: 0,
-          emp2DaysWorked: 0,
-          totalDaysWorked: 0,
-        };
-      }
+      if (emp.ProjectID !== arr[i + 1].ProjectID) return;
+      if (!pairWorkedTogether(emp, arr[i + 1])) return;
+
+      pairs[`pairProjectID#${emp.ProjectID}`] = {
+        pair: [emp, arr[i + 1]],
+        daysWorked: 0,
+      };
     });
+
+  console.log(pairs);
 
   const pairsLength = Object.keys(pairs).length;
 
   if (pairsLength < 1) return null;
 
+  // console.log(pairs);
+
+  /*
   Object.keys(pairs).forEach((key) => {
     const employee1 = pairs[key].pair[0];
     const employee2 = pairs[key].pair[1];
@@ -133,6 +147,7 @@ const pairWorkedTheLongestTime = (csvData) => {
     .slice(0, 1)[0];
 
   return pairToDisplay;
+  */
 };
 
 // ****** Event Listeners ******
@@ -155,8 +170,6 @@ csvForm.addEventListener('submit', (e) => {
     header: true,
     skipEmptyLines: true,
     complete: function (res) {
-      console.log(res);
-
       if (!validCsvDataFields(res))
         return errorMsg(
           'The data is not formatted correctly! Check for missing fields or invalid ones. ⛔'
