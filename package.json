@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/dimitarradulov/dimitar-radulov-employees#readme",
   "dependencies": {
+    "moment": "^2.29.1",
     "papaparse": "^5.3.1"
   },
   "devDependencies": {
