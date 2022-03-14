@@ -6,6 +6,7 @@
   --heading-color: #094067;
   --body-color: #5f6c7b;
   --light-gray: #c7c2c2;
+  --red: #ff6b6b;
 }
 
 *,
@@ -176,6 +177,15 @@ a {
 .emp-2,
 .total {
   font-weight: 600;
+}
+
+.error {
+  color: var(--red);
+  /* background: var(--red); */
+  /* border-radius: 5px; */
+
+  margin-top: 2rem;
+  /* padding: 1rem; */
 }
 
 @media screen and (max-width: 600px) {

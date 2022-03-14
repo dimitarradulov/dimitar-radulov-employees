@@ -6,11 +6,40 @@ const csvForm = document.querySelector('.upload-csv');
 const csvFile = document.querySelector('#csvFile');
 const csvTable = document.querySelector('.csv-table');
 const csvTableBody = csvTable.querySelector('.csv-table__body');
+const errorBox = document.querySelector('.error');
 
 // ****** Functions ******
+const clearErrorMsg = () => (errorBox.textContent = '');
+
+const errorMsg = (msg) => {
+  clearErrorMsg();
+
+  const markup = `
+    <p>${msg}</p>
+  `;
+
+  errorBox.insertAdjacentHTML('beforeend', markup);
+};
+
 const differenceInDaysBetweenDates = (date1, date2) => {
   const divider = 24 * 60 * 60 * 1000;
   return Math.floor((date2 - date1) / divider);
+};
+
+const validCsvDataFields = (csvData) => {
+  const {
+    meta: { fields },
+  } = csvData;
+
+  if (fields.length < 4) return false;
+
+  const dataFields = ['EmpID', 'ProjectID', 'DateFrom', 'DateTo'];
+
+  const correctDataFields = fields.every((field, i) => field === dataFields[i]);
+
+  if (!correctDataFields) return false;
+
+  return true;
 };
 
 const pairWorkedTheLongestTime = (csvData) => {
@@ -79,11 +108,22 @@ csvForm.addEventListener('submit', (e) => {
 
   if (!input) return;
 
+  // Check if valid format
+  const regex = /.+\.csv$/;
+
+  if (!regex.test(input.name))
+    return errorMsg('Invalid file! Please try again with a .csv file.');
+
+  // Parse the input
   Papa.parse(input, {
     download: true,
     header: true,
     skipEmptyLines: true,
     complete: function (res) {
+      console.log(res);
+
+      if (!validCsvDataFields(res)) return errorMsg('Invalid data format!');
+
       const displayPair = pairWorkedTheLongestTime(res);
 
       if (csvTable.classList.contains('hidden'))
