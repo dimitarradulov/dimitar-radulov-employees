@@ -14,8 +14,11 @@ moment().format();
 
 const clearErrorMsg = () => (errorBox.textContent = '');
 
+const hideTable = () => csvTable.classList.add('hidden');
+
 const errorMsg = (msg) => {
   clearErrorMsg();
+  hideTable();
 
   const markup = `
     <p>${msg}</p>
@@ -27,6 +30,10 @@ const errorMsg = (msg) => {
 const differenceInDaysBetweenDates = (date1, date2) => {
   const divider = 24 * 60 * 60 * 1000;
   return Math.floor((date2 - date1) / divider);
+};
+
+const parseToDate = (date) => {
+  return date.toLowerCase() === 'null' ? new Date() : new Date(date);
 };
 
 const validCsvDataFields = (csvData) => {
@@ -55,11 +62,11 @@ const validCsvDataFields = (csvData) => {
       return false;
 
     // 3.2) Check if the datefrom is valid date format
-    if (!moment(input.DateFrom).isValid()) return false;
+    if (!moment(input.DateFrom, true).isValid()) return false;
 
     // 3.3) Check if dateto is valid date format or null
     if (
-      !moment(input.DateTo).isValid() &&
+      !moment(input.DateTo, true).isValid() &&
       input.DateTo.toLowerCase() !== 'null'
     )
       return false;
@@ -82,6 +89,8 @@ const pairWorkedTogether = (emp1, emp2) => {
 
   if (moment(emp2.DateFrom).isBetween(emp1.DateFrom, emp1.DateTo)) return true;
 
+  if (moment(emp1.DateFrom).isSame(emp2.DateFrom)) return true;
+
   return false;
 };
 
@@ -90,7 +99,10 @@ const pairWorkedTheLongestTime = (csvData) => {
 
   const { data } = csvData;
 
-  console.log(data);
+  data.forEach((emp) => {
+    emp.DateFrom = parseToDate(emp.DateFrom);
+    emp.DateTo = parseToDate(emp.DateTo);
+  });
 
   data
     .sort((a, b) => Number(a.ProjectID) - Number(b.ProjectID))
@@ -101,53 +113,44 @@ const pairWorkedTheLongestTime = (csvData) => {
 
       pairs[`pairProjectID#${emp.ProjectID}`] = {
         pair: [emp, arr[i + 1]],
-        daysWorked: 0,
+        daysWorkedTogether: 0,
       };
     });
-
-  console.log(pairs);
 
   const pairsLength = Object.keys(pairs).length;
 
   if (pairsLength < 1) return null;
 
-  // console.log(pairs);
+  const calcDaysWorkedTogether = Object.values(pairs).map((employeePair) => {
+    const { pair } = employeePair;
+    const emp1 = pair[0];
+    const emp2 = pair[1];
 
-  /*
-  Object.keys(pairs).forEach((key) => {
-    const employee1 = pairs[key].pair[0];
-    const employee2 = pairs[key].pair[1];
+    let date1 = moment(emp1.DateFrom).isSame(emp2.DateFrom) ? emp1.DateFrom : 0;
+    let date2 = moment(emp1.DateTo).isSame(emp2.DateTo) ? emp1.DateTo : 0;
 
-    const employee1Date1 = new Date(employee1.DateFrom);
-    const employee1Date2 =
-      employee1.DateTo.toLowerCase() === 'null'
-        ? new Date()
-        : new Date(employee1.DateTo);
+    if (emp1.DateFrom < emp2.DateFrom) date1 = emp2.DateFrom;
+    if (emp1.DateFrom > emp2.DateFrom) date1 = emp1.DateFrom;
 
-    const employee2Date1 = new Date(employee2.DateFrom);
-    const employee2Date2 =
-      employee2.DateTo.toLowerCase() === 'null'
-        ? new Date()
-        : new Date(employee2.DateTo);
+    if (emp1.DateTo < emp2.DateTo) date2 = emp1.DateTo;
+    if (emp1.DateTo > emp2.DateTo) date2 = emp2.DateTo;
 
-    pairs[key].emp1DaysWorked = differenceInDaysBetweenDates(
-      employee1Date1,
-      employee1Date2
-    );
-    pairs[key].emp2DaysWorked = differenceInDaysBetweenDates(
-      employee2Date1,
-      employee2Date2
-    );
-    pairs[key].totalDaysWorked =
-      pairs[key].emp1DaysWorked + pairs[key].emp2DaysWorked;
+    const daysWorked = differenceInDaysBetweenDates(date1, date2);
+
+    return { daysWorked, pair };
   });
 
-  const pairToDisplay = Object.values(pairs)
-    .sort((a, b) => b.totalDaysWorked - a.totalDaysWorked)
-    .slice(0, 1)[0];
+  let biggestNum = 0;
+
+  calcDaysWorkedTogether.forEach((pair) => {
+    if (pair.daysWorked > biggestNum) biggestNum = pair.daysWorked;
+  });
+
+  const pairToDisplay = calcDaysWorkedTogether.find(
+    (pair) => pair.daysWorked === biggestNum
+  );
 
   return pairToDisplay;
-  */
 };
 
 // ****** Event Listeners ******
@@ -180,6 +183,7 @@ csvForm.addEventListener('submit', (e) => {
       if (csvTable.classList.contains('hidden'))
         csvTable.classList.remove('hidden');
 
+      clearErrorMsg();
       csvTableBody.textContent = '';
 
       let markup;
@@ -199,9 +203,7 @@ csvForm.addEventListener('submit', (e) => {
             <td>${displayPair.pair[1].EmpID}</td>
             <td>${displayPair.pair[0].ProjectID}</td>
             <td>
-              <em>Employee #1:</em> <span class="emp-1">${displayPair.emp1DaysWorked}</span>,
-              <em>Employee #2:</em> <span class="emp-2">${displayPair.emp2DaysWorked}</span>,
-              <em>Total:</em> <span class="total">${displayPair.totalDaysWorked}</span>
+              ${displayPair.daysWorked}
             </td>
           </tr>
         `;
