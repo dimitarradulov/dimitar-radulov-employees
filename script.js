@@ -10,6 +10,7 @@ const csvTableBody = csvTable.querySelector('.csv-table__body');
 const errorBox = document.querySelector('.error');
 
 // ****** Functions ******
+// Inititialize moment.js
 moment().format();
 
 const clearErrorMsg = () => (errorBox.textContent = '');
@@ -99,11 +100,13 @@ const pairWorkedTheLongestTime = (csvData) => {
 
   const { data } = csvData;
 
+  // 1) Parse the dateFrom and dateTo input fields to real dates
   data.forEach((emp) => {
     emp.DateFrom = parseToDate(emp.DateFrom);
     emp.DateTo = parseToDate(emp.DateTo);
   });
 
+  // 2) sort for easy pair access and add to new pair object if criteria met
   data
     .sort((a, b) => Number(a.ProjectID) - Number(b.ProjectID))
     .forEach((emp, i, arr) => {
@@ -117,10 +120,12 @@ const pairWorkedTheLongestTime = (csvData) => {
       };
     });
 
+  // 3) Check if pairs is not empty
   const pairsLength = Object.keys(pairs).length;
 
   if (pairsLength < 1) return null;
 
+  // 4) Map to a new array with days worked calculations
   const calcDaysWorkedTogether = Object.values(pairs).map((employeePair) => {
     const { pair } = employeePair;
     const emp1 = pair[0];
@@ -140,12 +145,14 @@ const pairWorkedTheLongestTime = (csvData) => {
     return { daysWorked, pair };
   });
 
+  // 5) Find the biggest daysworked and store it in a variable
   let biggestNum = 0;
 
   calcDaysWorkedTogether.forEach((pair) => {
     if (pair.daysWorked > biggestNum) biggestNum = pair.daysWorked;
   });
 
+  // 6) Find the object pair that has the biggest days worked based on the above
   const pairToDisplay = calcDaysWorkedTogether.find(
     (pair) => pair.daysWorked === biggestNum
   );
