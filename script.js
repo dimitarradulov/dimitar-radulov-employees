@@ -1,5 +1,6 @@
 import 'core-js/stable';
 import Papa from 'papaparse';
+import moment from 'moment';
 
 // ****** Elements ******
 const csvForm = document.querySelector('.upload-csv');
@@ -9,6 +10,8 @@ const csvTableBody = csvTable.querySelector('.csv-table__body');
 const errorBox = document.querySelector('.error');
 
 // ****** Functions ******
+moment().format();
+
 const clearErrorMsg = () => (errorBox.textContent = '');
 
 const errorMsg = (msg) => {
@@ -31,14 +34,46 @@ const validCsvDataFields = (csvData) => {
     meta: { fields },
   } = csvData;
 
+  // 1) Check if all fields are present
   if (fields.length < 4) return false;
 
+  // 2) Check if all fields are the correct ones
   const dataFields = ['EmpID', 'ProjectID', 'DateFrom', 'DateTo'];
 
-  const correctDataFields = fields.every((field, i) => field === dataFields[i]);
+  const isCorrectDataFields = fields.every(
+    (field, i) => field === dataFields[i]
+  );
 
-  if (!correctDataFields) return false;
+  if (!isCorrectDataFields) return false;
 
+  const { data } = csvData;
+
+  // 3) Check if all the input fields are correctly formated
+  const isInputFieldsCorrectFormat = data.every((input) => {
+    // 3.1) Check if employee id and project id are numbers
+    if (Number.isNaN(+input.EmpID) || Number.isNaN(+input.ProjectID))
+      return false;
+
+    // 3.2) Check if the datefrom is valid date format
+    if (!moment(input.DateFrom).isValid()) return false;
+
+    // 3.3) Check if dateto is valid date format or null
+    if (
+      !moment(input.DateTo).isValid() &&
+      input.DateTo.toLowerCase() !== 'null'
+    )
+      return false;
+
+    // 3.4) Check if the end date is not smaller than the beginning date
+    if (moment(input.DateFrom) > moment(input.DateTo)) return false;
+
+    // 3.5) If all checkes passed return true
+    return true;
+  });
+
+  if (!isInputFieldsCorrectFormat) return false;
+
+  // 4) If everything correct return true
   return true;
 };
 
