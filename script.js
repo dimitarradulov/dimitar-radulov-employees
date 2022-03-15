@@ -152,6 +152,17 @@ const pairWorkedTheLongestTime = (csvData) => {
     if (pair.daysWorked > biggestNum) biggestNum = pair.daysWorked;
   });
 
+  /* Could be done with reduce
+  const biggestDaysWorkedTogether = calcDaysWorkedTogether.reduce(
+    (prevValue, currValue) => {
+      if (prevValue.daysWorked > currValue.daysWorked)
+        return prevValue.daysWorked;
+      else return currValue.daysWorked;
+    },
+    0
+  );
+  */
+
   // 6) Find the object pair that has the biggest days worked based on the above
   const pairToDisplay = calcDaysWorkedTogether.find(
     (pair) => pair.daysWorked === biggestNum
